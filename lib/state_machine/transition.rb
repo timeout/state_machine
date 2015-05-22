@@ -22,7 +22,7 @@ module StateMachine
     end
 
     def is_current_state?(state)
-      curr_state == state
+      @curr_state == state
     end
   end
 end
