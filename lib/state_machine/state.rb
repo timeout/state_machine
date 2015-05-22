@@ -1,0 +1,58 @@
+require 'state_machine/transition'
+
+module StateMachine
+  class Machine
+
+    attr_accessor :transitions
+    attr_reader :start_state
+
+    def initialize(start_state = :start_state, transitions = [])
+      @state = @start_state = :start_state
+      @transitions = transitions
+      yield(self) if block_given?
+    end
+
+    def machine_state
+      @state
+    end
+
+    def ==(other)
+      @start_state == other.start_state and transitions == other.transitions
+    end
+
+    def eql?(other)
+      self == other
+    end
+
+    def add_transition(transition)
+      @transitions << transition
+    end
+
+    def transitions_for(state)
+      @transitions.find_all { |trans| trans.is_current_state? state }
+    end
+
+    def show_transitions_for(state)
+      search = transitions_for(state)
+      search.map { |trans| trans }.join('\n')
+    end
+
+    def transition(on_event)
+
+      # are there any tansitions for the current state on this event?
+      transitions = transitions_for(@state)
+      raise "bad transition for state: #{@state} on event: #{on_event}" if transitions.empty?
+
+      # is there more than one transition for the current state on this
+      # event?
+      events = transitions.find_all { |trans| trans.event == on_event }
+      raise "ambiguous event: #{on_event} for state: #{@state}" unless events.size == 1
+
+      @state = events.first.new_state
+    end
+
+    def number_of_transitions
+      @transitions.size
+    end
+  end
+end
