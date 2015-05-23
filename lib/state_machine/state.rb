@@ -58,6 +58,10 @@ module StateMachine
       @transitions.size
     end
 
+    def states
+      @transitions.collect { |transition| transition.new_state }
+    end
+
     private
       attr_writer :transitions
   end

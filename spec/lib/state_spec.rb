@@ -43,8 +43,10 @@ RSpec.describe 'StateMachine::Machine Machine' do
     end
 
     it 'changes machine_state from first to second on event second_event' do
-      first_trans = StateMachine::Transition.new(:start_state, :first_event, :first)
-      second_trans = StateMachine::Transition.new(:first, :second_event, :second)
+      first_trans = StateMachine::Transition
+        .new(:start_state, :first_event, :first)
+      second_trans = StateMachine::Transition
+        .new(:first, :second_event, :second)
       sm = StateMachine::Machine.new
       sm.add_transition(first_trans)
       sm.add_transition(second_trans)
@@ -55,8 +57,10 @@ RSpec.describe 'StateMachine::Machine Machine' do
 
     it 'changes machine_state from first to first on event first_event' do
       sm = StateMachine::Machine.new do |machine|
-        machine.transitions << StateMachine::Transition.new(:start_state, :first_event, :first)
-        machine.transitions << StateMachine::Transition.new(:first, :first_event, :first)
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :first_event, :first)
+        machine.transitions << StateMachine::Transition
+          .new(:first, :first_event, :first)
       end
       sm.transition(:first_event)
       sm.transition(:first_event)
@@ -65,9 +69,12 @@ RSpec.describe 'StateMachine::Machine Machine' do
 
     it 'changes machine_state from second to first on event first_event' do
       sm = StateMachine::Machine.new do |machine|
-        machine.transitions << StateMachine::Transition.new(:start_state, :first_event, :first)
-        machine.transitions << StateMachine::Transition.new(:first, :second_event, :second)
-        machine.transitions << StateMachine::Transition.new(:second, :first_event, :first)
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :first_event, :first)
+        machine.transitions << StateMachine::Transition
+          .new(:first, :second_event, :second)
+        machine.transitions << StateMachine::Transition
+          .new(:second, :first_event, :first)
       end
       sm.transition(:first_event)
       sm.transition(:second_event)
@@ -75,10 +82,12 @@ RSpec.describe 'StateMachine::Machine Machine' do
       expect(sm.machine_state).to eq(:first)
     end
 
-    it 'changes machine_state from first to third on event third_event', broken: true do
+    it 'changes machine_state from first to third on event third_event' do
       sm = StateMachine::Machine.new do |machine|
-        machine.transitions << StateMachine::Transition.new(:start_state, :first_event, :first)
-        machine.transitions << StateMachine::Transition.new(:first, :third_event, :third)
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :first_event, :first)
+        machine.transitions << StateMachine::Transition
+          .new(:first, :third_event, :third)
       end
       sm.transition(:first_event)
       sm.transition(:third_event)
@@ -87,11 +96,26 @@ RSpec.describe 'StateMachine::Machine Machine' do
 
     it 'throws an exception on an undefined event' do
       sm = StateMachine::Machine.new do |machine|
-        machine.transitions << StateMachine::Transition.new(:start_state, :first_event, :first)
-        machine.transitions << StateMachine::Transition.new(:first, :third_event, :third)
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :first_event, :first)
+        machine.transitions << StateMachine::Transition
+          .new(:first, :third_event, :third)
       end
       sm.transition(:first_event)
-      expect{sm.transition(:bad_event)}.to raise_error StateMachine::IllegalTransition
+      expect{sm.transition(:bad_event)}
+        .to raise_error StateMachine::IllegalTransition
+    end
+
+    it 'returns a list of the states' do
+      sm = StateMachine::Machine.new do |machine|
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :first_event, :first_state)
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :second_event, :second_state)
+        machine.transitions << StateMachine::Transition
+          .new(:second_state, :third_event, :third_state)
+      end
+      expect(sm.states).to eq([:first_state, :second_state, :third_state])
     end
   end
 end
