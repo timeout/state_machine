@@ -3,8 +3,7 @@ require 'state_machine/transition'
 module StateMachine
   class Machine
 
-    attr_accessor :transitions
-    attr_reader :start_state
+    attr_reader :transitions, :start_state
 
     def initialize(start_state = :start_state, transitions = [])
       @state = @start_state = :start_state
@@ -58,5 +57,8 @@ module StateMachine
     def number_of_transitions
       @transitions.size
     end
+
+    private
+      attr_writer :transitions
   end
 end
