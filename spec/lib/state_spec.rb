@@ -117,5 +117,17 @@ RSpec.describe 'StateMachine::Machine Machine' do
       end
       expect(sm.states).to eq([:first_state, :second_state, :third_state])
     end
+
+    it 'returns a list of the events' do
+      sm = StateMachine::Machine.new do |machine|
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :first_event, :first_state)
+        machine.transitions << StateMachine::Transition
+          .new(:start_state, :second_event, :second_state)
+        machine.transitions << StateMachine::Transition
+          .new(:second_state, :third_event, :third_state)
+      end
+      expect(sm.events).to eq([:first_event, :second_event, :third_event])
+    end
   end
 end

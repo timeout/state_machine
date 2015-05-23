@@ -62,6 +62,10 @@ module StateMachine
       @transitions.collect { |transition| transition.new_state }
     end
 
+    def events
+      @transitions.collect { |transition| transition.event }
+    end
+
     private
       attr_writer :transitions
   end
