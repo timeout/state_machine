@@ -1,3 +1,4 @@
+require 'state_machine'
 require 'state_machine/transition'
 require 'state_machine/state'
 
@@ -90,7 +91,7 @@ RSpec.describe 'StateMachine::Machine Machine' do
         machine.transitions << StateMachine::Transition.new(:first, :third_event, :third)
       end
       sm.transition(:first_event)
-      expect{sm.transition(:bad_event)}.to raise_error
+      expect{sm.transition(:bad_event)}.to raise_error StateMachine::IllegalTransition
     end
   end
 end

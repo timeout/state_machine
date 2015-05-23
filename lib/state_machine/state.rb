@@ -41,12 +41,16 @@ module StateMachine
 
       # are there any tansitions for the current state on this event?
       transitions = transitions_for(@state)
-      raise "bad transition for state: #{@state} on event: #{on_event}" if transitions.empty?
+      if transitions.empty?
+        raise IllegalState.new( "Machine state: [ #{@state} ] (Unknown transition: [ #{on_event} ])" )
+      end
 
       # is there more than one transition for the current state on this
       # event?
       events = transitions.find_all { |trans| trans.event == on_event }
-      raise "ambiguous event: #{on_event} for state: #{@state}" unless events.size == 1
+      unless events.size == 1
+        raise IllegalTransition.new( "Machine state: [ #{@state} ] (Multiple transitions defined for [ #{on_event} ]) " ) 
+      end
 
       @state = events.first.new_state
     end
