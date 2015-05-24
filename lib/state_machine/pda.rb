@@ -61,6 +61,10 @@ module StateMachine
       @state = @stack.peek
     end
 
+    def events
+      @transitions.collect { |transition| transition.new_state }
+    end
+
     private
     attr_writer :transitions
 
