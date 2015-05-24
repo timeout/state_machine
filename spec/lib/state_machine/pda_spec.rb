@@ -62,5 +62,34 @@ RSpec.describe 'StateMachine::PDA' do
       pda.transition(:first_event, :pop)    #
       expect(pda.state).to eq(:start_state)
     end
+
+    it 'returns to the article_state' do
+      pda = StateMachine::PDA.new do |machine|
+        machine.transitions << StateMachine::PDATransition
+            .new(:start_state, :article, :push, :article_state)
+        machine.transitions << StateMachine::PDATransition
+            .new(:article_state, :article, :pop)
+        machine.transitions << StateMachine::PDATransition
+            .new(:article_state, :body, :push, :body_state)
+        machine.transitions << StateMachine::PDATransition
+            .new(:body_state, :body, :push, :body_state)
+        machine.transitions << StateMachine::PDATransition
+            .new(:body_state, :body, :pop)
+        machine.transitions << StateMachine::PDATransition
+            .new(:body_state, :article, :pop)
+      end
+      pda.transition(:article, :push)
+      expect(pda.state).to eq(:article_state)
+      pda.transition(:body, :push)
+      expect(pda.state).to eq(:body_state)
+      pda.transition(:body, :push)
+      expect(pda.state).to eq(:body_state)
+      pda.transition(:body, :pop)
+      expect(pda.state).to eq(:body_state)
+      pda.transition(:body, :pop)
+      expect(pda.state).to eq(:article_state)
+      pda.transition(:article, :pop)
+      expect(pda.state).to eq(:start_state)
+    end
   end
 end

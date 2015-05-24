@@ -62,7 +62,7 @@ module StateMachine
     end
 
     def events
-      @transitions.collect { |transition| transition.new_state }
+      @transitions.collect { |transition| transition.event }
     end
 
     private
