@@ -1,5 +1,5 @@
 module StateMachine
-  class Transition
+  class DFATransition
 
     attr_reader :curr_state, :event, :new_state
 
@@ -10,7 +10,9 @@ module StateMachine
     end
 
     def ==(other)
-      @curr_state == other.curr_state and @event == other.event and @new_state == other.new_state
+      @curr_state == other.curr_state and 
+        @event == other.event and 
+        @new_state == other.new_state
     end
 
     def eql?(other)
