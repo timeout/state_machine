@@ -1,6 +1,6 @@
 module StateMachine
   class PDATransition
-    include Enumerable
+    include Comparable
 
     attr_reader :curr_state, :event, :stack_op, :new_state
 
@@ -20,7 +20,7 @@ module StateMachine
     end
 
     def eql?(other)
-      self == other
+      self <=> other
     end
 
     def <=>(other)

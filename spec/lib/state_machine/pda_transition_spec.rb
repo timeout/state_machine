@@ -28,5 +28,6 @@ RSpec.describe 'StateMachine::PDATransition' do
       expect(pda_transition).to eq(StateMachine::PDATransition
         .new(:first_state, :first_event, :push, :second_state))
     end
+
   end
 end
