@@ -42,15 +42,16 @@ module StateMachine
       transitions = transitions_for(@state)
       if transitions.empty?
         raise IllegalState
-          .new( "DFA state: [ #{@state} ] (Unknown transition: [ #{on_event} ])" )
+          .new( "[ #{on_event} ] (#{self.machine_state} \u2192 ???)" ) 
       end
 
       # is there more than one transition for the current state on this
       # event?
       events = transitions.find_all { |trans| trans.event == on_event }
       unless events.size == 1
+        multiple_events = events.join(' || ')
         raise IllegalTransition
-          .new( "DFA state: [ #{@state} ] (Multiple transitions defined for [ #{on_event} ]) " ) 
+          .new( "[ #{on_event} ] (#{self.machine_state} \u2192 #{multiple_events})" ) 
       end
 
       @state = events.first.new_state
