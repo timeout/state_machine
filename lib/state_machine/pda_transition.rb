@@ -1,5 +1,6 @@
 module StateMachine
   class PDATransition
+    include Enumerable
 
     attr_reader :curr_state, :event, :stack_op, :new_state
 
@@ -18,15 +19,27 @@ module StateMachine
       @new_state = new_state
     end
 
-    def ==(other)
-      @curr_state == other.curr_state and 
-        @event == other.event and 
-        @stack_op == other.stack_op and
-        @new_state == other.new_state
-    end
-
     def eql?(other)
       self == other
+    end
+
+    def <=>(other)
+      result = nil
+      if (self.event < other.event or 
+          (self.event == other.event and self.stack_op < other.stack_op))
+        result = -1
+      end
+      if (self.curr_state == other.curr_state and
+          self.event == other.event and
+          self.stack_op == other.stack_op and
+          self.new_state == other.new_state)
+        result = 0
+      end
+      if (self.event > other.event or
+          (self.event == other.event and self.stack_op < other.stack_op))
+          result = 1
+      end
+      result
     end
 
     def to_s
