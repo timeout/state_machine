@@ -42,7 +42,7 @@ module StateMachine
 
       if transitions.empty?
         raise IllegalState
-          .new( "PDA state: [ #{@state} ] (Unknown transition: [ #{on_event} ])" )
+          .new( "[ #{on_event} : #{on_op} ] (#{self.machine_state} \u2192 ???)" )
       end
 
       events = transitions.find_all do |trans| 
@@ -50,9 +50,10 @@ module StateMachine
       end
 
       unless events.size == 1
+        multiple_events = events.join(' || ')
         raise IllegalTransition
-          .new( "DFA state: [ #{@state} ]" +
-        " (Multiple transitions defined for [ #{on_event}:#{on_op} ]) " ) 
+          .new( "[ #{on_event} : #{on_op} ]" +
+        " (#{self.machine_state} \u2192 #{multiple_events})" )
       end
 
       @stack.push(events.first.new_state) if on_op == :push
