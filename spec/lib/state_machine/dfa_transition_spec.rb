@@ -5,7 +5,7 @@ RSpec.describe 'StateMachine::Transitions' do
     it 'defines a transition from first to second on event second_event' do
       transition = StateMachine::DFATransition
         .new(:first, :second_event, :second)
-      expect(transition.to_s).to eq("on second_event: first -> second")
+      expect(transition.to_s).to eq("[ second_event ] (first → second)")
     end
   end
 

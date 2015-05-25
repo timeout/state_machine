@@ -22,7 +22,7 @@ RSpec.describe 'StateMachine::DFA' do
       sm = StateMachine::DFA.new
       first_trans = StateMachine::DFATransition.new(:start, :first_event, :first)
       sm.add_transition(first_trans)
-      expect(sm.show_transitions_for(:start)).to eq("on first_event: start -> first")
+      expect(sm.show_transitions_for(:start)).to eq("[ first_event ] (start → first)")
     end
   end
 
