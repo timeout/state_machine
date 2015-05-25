@@ -6,8 +6,8 @@ RSpec.describe 'StateMachine::PDATransition' do
             on event first_event with stack_operation push' do
       pda_transition = StateMachine::PDATransition
           .new(:first_state, :first_event, :push, :second_state)
-      expect(pda_transition.to_s).to eq('event: first_event, ' +
-          'stack operation: push, first_state -> second_state')
+      expect(pda_transition.to_s).to eq(
+          '[ first_event : push ] (first_state → second_state)')
     end
 
     it 'UknownStackOp raised if the stack_op is unknown' do

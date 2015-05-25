@@ -43,7 +43,7 @@ module StateMachine
     end
 
     def to_s
-      "event: #{@event}, stack operation: #{@stack_op}, #{@curr_state} -> #{@new_state}"
+      "[ #{@event} : #{@stack_op} ] (#{@curr_state} \u2192 #{@new_state})"
     end
 
     def is_current_state?(state)
